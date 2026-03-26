@@ -6,8 +6,6 @@ class Verifier:
     def update_player_code(self, player_code: tuple[int,int,int]):
         self.player_code = player_code
 
-    # WE SHOULD COMPRESS IT TO ONE METHOD WITH SECRET POSITION VARIABLE
-
     def compare_digits_to_number(self, number_index: int, number_to_compare: int) -> bool:
 
         secret_to_check = self.secret_code[number_index]
