@@ -38,11 +38,14 @@ class Verifier:
         first_player_compare = self.player_code[first_index]
         second_player_compare = self.player_code[second_index]
 
-        if first_secret_compare < second_secret_compare and first_player_compare < second_player_compare:
+        if (first_secret_compare < second_secret_compare and
+                first_player_compare < second_player_compare):
             return True
-        elif first_secret_compare == second_secret_compare and first_player_compare == second_player_compare:
+        elif (first_secret_compare == second_secret_compare and
+              first_player_compare == second_player_compare):
             return True
-        elif first_secret_compare > second_secret_compare and first_player_compare > second_player_compare:
+        elif (first_secret_compare > second_secret_compare and
+              first_player_compare > second_player_compare):
             return True
         else:
             return False
@@ -51,8 +54,10 @@ class Verifier:
         secret_min_value = min(self.secret_code)
         player_min_value = min(self.player_code)
 
-        secret_index = self.secret_code.index(secret_min_value) if self.secret_code.count(secret_min_value) == 1 else -1
-        player_index = self.player_code.index(player_min_value) if self.player_code.count(player_min_value) == 1 else -1
+        secret_index = self.secret_code.index(secret_min_value) \
+            if self.secret_code.count(secret_min_value) == 1 else -1
+        player_index = self.player_code.index(player_min_value) \
+            if self.player_code.count(player_min_value) == 1 else -1
 
         return secret_index == player_index
 
@@ -60,8 +65,10 @@ class Verifier:
         secret_max_value = max(self.secret_code)
         player_max_value = max(self.player_code)
 
-        secret_index = self.secret_code.index(secret_max_value) if self.secret_code.count(secret_max_value) == 1 else -1
-        player_index = self.player_code.index(player_max_value) if self.player_code.count(player_max_value) == 1 else -1
+        secret_index = self.secret_code.index(secret_max_value) \
+            if self.secret_code.count(secret_max_value) == 1 else -1
+        player_index = self.player_code.index(player_max_value) \
+            if self.player_code.count(player_max_value) == 1 else -1
 
         return secret_index == player_index
 

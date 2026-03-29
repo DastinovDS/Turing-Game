@@ -23,7 +23,7 @@ class Menu:
 
     @staticmethod
     def show_goodbye() -> None:
-        print("\nThank you for playing! See you next time! 👋")
+        print("\nThank you for playing! See you next time!")
 
     @staticmethod
     def translate_rule(method_name: str, args: tuple) -> str:

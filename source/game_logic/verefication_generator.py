@@ -9,7 +9,7 @@ class VerificationGenerator:
         for number_to_compare in range(1, 6):
             for secret_index in range(3):
                 self.combinations_list.append(("compare_digits_to_number",
-                                          (secret_index, number_to_compare)))
+                                               (secret_index, number_to_compare)))
 
     def generate_check_if_even(self) -> None:
         for secret_index in range(3):
@@ -21,8 +21,7 @@ class VerificationGenerator:
 
     def generate_compare_two_numbers(self) -> None:
         for first_index, second_index in combinations(range(3), 2):
-            self.combinations_list.append(
-                ("compare_two_numbers", (first_index, second_index)))
+            self.combinations_list.append(("compare_two_numbers", (first_index, second_index)))
 
     def generate_compare_min_position(self) -> None:
         self.combinations_list.append(("compare_min_position", ()))
@@ -42,11 +41,15 @@ class VerificationGenerator:
     def generate_compare_sum_to_value(self) -> None:
         for sum_to_compare in range(3, 10):
             for first_index, second_index in combinations(range(3), 2):
-                self.combinations_list.append(("compare_sum_to_value", ((first_index, second_index), sum_to_compare)))
+                self.combinations_list.append(("compare_sum_to_value",
+                                               ((first_index, second_index),
+                                                sum_to_compare)))
 
         for sum_to_compare in range(6, 13):
             for first_index, second_index, third_index in combinations(range(3), 3):
-                self.combinations_list.append(("compare_sum_to_value", ((first_index, second_index, third_index), sum_to_compare)))
+                self.combinations_list.append(("compare_sum_to_value",
+                                               ((first_index, second_index, third_index),
+                                                sum_to_compare)))
 
     def generate_check_number_order(self) -> None:
         self.combinations_list.append(("check_number_order", ()))
@@ -60,9 +63,12 @@ class VerificationGenerator:
         self.combinations_list.clear()
         for method_name in dir(self):
             if method_name.startswith("generate_"):
-                method = getattr(self, method_name)
-                if callable(method):
-                    method()
+                try:
+                    method = getattr(self, method_name)
+                    if callable(method):
+                        method()
+                except Exception as e:
+                    print(f"Error executing {method_name}: {e}")
 
     @staticmethod
     def find_all_solutions(selected_rules: list, verifier) -> list[tuple]:
@@ -74,9 +80,14 @@ class VerificationGenerator:
 
             is_match = True
             for method_name, args in selected_rules:
-                method = getattr(verifier, method_name)
-
-                if not method(*args):
+                try:
+                    method = getattr(verifier, method_name)
+                    if not method(*args):
+                        is_match = False
+                        break
+                except AttributeError:
+                    continue
+                except Exception:
                     is_match = False
                     break
 

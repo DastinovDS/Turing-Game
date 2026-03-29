@@ -35,10 +35,14 @@ class TaskGenerator:
                                                                verifier)
 
             if len(solutions) == 1:
-                self.active_pool.remove(secret_code)
+                try:
+                    self.active_pool.remove(secret_code)
+                except ValueError:
+                    print("This code was deleted or is not in pool!")
                 return secret_code, selected_rules
 
-        print("Warning: Unique solution could not be found. Play on your own risk or try to start a new game.")
+        print("Warning: Unique solution could not be found. "
+              "Play on your own risk or try to start a new game.")
         backup_code = random.choice(self.active_pool)
         return backup_code, random.sample(
             self.rule_generator.combinations_list, num_rules)
