@@ -1,4 +1,4 @@
-from itertools import combinations
+from itertools import combinations, product
 from typing import Any
 
 class VerificationGenerator:
@@ -51,6 +51,11 @@ class VerificationGenerator:
     def generate_check_number_order(self) -> None:
         self.combinations_list.append(("check_number_order", ()))
 
+    def generate_count_value(self) -> None:
+        for number_to_check in range(1, 6):
+            for expected_count in range(4):
+                self.combinations_list.append(("count_value", (number_to_check, expected_count)))
+
     def fill_all_combinations(self) -> None:
         self.combinations_list.clear()
         for method_name in dir(self):
@@ -58,3 +63,24 @@ class VerificationGenerator:
                 method = getattr(self, method_name)
                 if callable(method):
                     method()
+
+    @staticmethod
+    def find_all_solutions(selected_rules: list, verifier) -> list[tuple]:
+        all_codes = list(product(range(1, 6), repeat=3))
+        solutions = []
+
+        for code in all_codes:
+            verifier.player_code = code
+
+            is_match = True
+            for method_name, args in selected_rules:
+                method = getattr(verifier, method_name)
+
+                if not method(*args):
+                    is_match = False
+                    break
+
+            if is_match:
+                solutions.append(code)
+
+        return solutions

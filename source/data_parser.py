@@ -1,42 +1,45 @@
+import os
+
+
 def clean_list(input_list: list) -> list[str]:
-    return [element.strip() for element in input_list]
+    return [element.strip() for element in input_list if element.strip()]
+
 
 def check_code_string(potential_code: list) -> bool:
     if len(potential_code) == 3:
-        counter = 0
         for code_char in potential_code:
-            if code_char.isdigit() and 1 <= int(code_char) <= 4:
-                counter += 1
-        if counter == 3:
-            return True
+            if not (code_char.isdigit() and 1 <= int(code_char) <= 5):
+                return False
+        return True
     return False
 
-def create_tuple(buffer: str) -> tuple[int,int,int] | None:
-    potential_code = buffer.split(',')
-    cleaned_potential_code = clean_list(potential_code)
-    if check_code_string(cleaned_potential_code):
-        return int(cleaned_potential_code[0]), int(cleaned_potential_code[1]), int(cleaned_potential_code[2])
-    else:
-        return None
 
-def parse_file() -> list[tuple[int,int,int]] | None:
+def create_tuple(buffer: str) -> tuple[int, int, int] | None:
+    if not buffer.strip():
+        return None
+    potential_code = buffer.split(',')
+    cleaned = clean_list(potential_code)
+    if check_code_string(cleaned):
+        return int(cleaned[0]), int(cleaned[1]), int(cleaned[2])
+    return None
+
+
+def parse_file() -> list[tuple[int, int, int]]:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, 'data', 'codes.txt')
 
     code_list = []
+    try:
+        with open(file_path, 'r', encoding="utf-8") as file:
+            content = file.read()
+            blocks = content.split(';')
+            for block in blocks:
+                code = create_tuple(block)
+                if code:
+                    code_list.append(code)
+    except FileNotFoundError:
+        print(f"File not found: {file_path}. Using default codes")
+        return [(1, 2, 3), (4, 5, 2), (2, 2, 2), (5, 1, 4)]
 
-    with open('../data/train.txt', 'r', encoding="utf-8") as file:
-        buffer = ""
-
-        while True:
-            char = file.read(1)
-
-            if char == ';' or not char:
-                valid_code = create_tuple(buffer)
-                if valid_code:
-                    code_list.append(valid_code)
-                buffer = ""
-
-            if not char:
-                break
-
-            else:
-                buffer += char
+    print(f"Codes successfully loaded: {len(code_list)}")
+    return code_list

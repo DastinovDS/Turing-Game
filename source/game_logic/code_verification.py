@@ -107,3 +107,8 @@ class Verifier:
 
     def check_number_order(self):
         return self.get_order_type(self.secret_code) == self.get_order_type(self.player_code)
+
+    def count_value(self, value: int, expected_count: int) -> bool:
+        actual_count = self.secret_code.count(value)
+        player_count = self.player_code.count(value)
+        return (actual_count == expected_count) == (player_count == expected_count)
