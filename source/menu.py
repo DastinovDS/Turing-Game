@@ -1,6 +1,20 @@
 class Menu:
+    """
+    Handles all user interface interactions and console outputs.
+
+    This class is responsible for displaying the main menu, game rules,
+    and translating technical verification method names into human-readable
+    instructions for the player.
+    """
+
     @staticmethod
     def show_main_menu() -> str:
+        """
+        Displays the main navigation menu and captures user input.
+
+        Returns:
+            str: The stripped string input from the user representing their choice.
+        """
         print("\n" + "=" * 30)
         print("TURING MACHINE")
         print("=" * 30)
@@ -13,20 +27,41 @@ class Menu:
 
     @staticmethod
     def show_rules() -> None:
+        """
+        Displays a summary of the game rules and logic to the console.
+        """
         print("\n--- GAME RULES ---")
-        print("Your goal is to crack a three-digit code (numbers from 1 to 5).")
+        print(
+            "Your goal is to crack a three-digit code (numbers from 1 to 5).")
         print("You will be provided with several conditions (verifiers).")
         print("You can test your guesses to see if they satisfy these rules.")
-        print("Use logic to eliminate wrong options and find the unique correct code!")
+        print(
+            "Use logic to eliminate wrong options and find the unique correct code!")
         print("--------------------\n")
         input("Press Enter to return to the menu...")
 
     @staticmethod
     def show_goodbye() -> None:
+        """
+        Displays a farewell message upon program termination.
+        """
         print("\nThank you for playing! See you next time!")
 
     @staticmethod
     def translate_rule(method_name: str, args: tuple) -> str:
+        """
+        Translates a technical Verifier method name and its arguments into English.
+
+        This allows the player to understand what each 'machine' (verifier)
+        is checking without seeing the underlying Python method names.
+
+        Args:
+            method_name (str): The name of the method in the Verifier class.
+            args (tuple): The specific parameters for that rule (e.g., indices or values).
+
+        Returns:
+            str: A human-readable description of the verification rule.
+        """
         pos = {0: "FIRST", 1: "SECOND", 2: "THIRD"}
 
         def compare_digits_to_number(a: tuple) -> str:
