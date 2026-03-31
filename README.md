@@ -32,7 +32,7 @@ A Python-based implementation of the "Turing Machine" board game. The goal is to
 ## Getting Started
 
 ### Prerequisites
-- Python 3.10 or higher
+- Python 3.14 or higher
 - `coverage`, `mypy`, `pylint` (for development and testing)
 
 ### Installation
