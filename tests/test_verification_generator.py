@@ -1,5 +1,5 @@
 import unittest
-from source.verefication_generator import VerificationGenerator
+from source.verification_generator import VerificationGenerator
 from source.code_verification import Verifier
 
 

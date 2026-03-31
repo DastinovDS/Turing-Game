@@ -30,7 +30,7 @@ def create_tuple(buffer: str) -> tuple[int, int, int] | None:
 
 def parse_file() -> list[tuple[int, int, int]]:
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(current_dir, 'data', 'codes.txt')
+    file_path = os.path.join(current_dir, 'codes.txt')
 
     code_list = []
     try:

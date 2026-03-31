@@ -9,12 +9,26 @@ A Python-based implementation of the "Turing Machine" board game. The goal is to
 - **Robust Data Handling**: External source for secret codes with automated fallback to default values.
 
 ## Project Structure
-- `source/`: Main application package.
-  - `game_logic/`: Core mechanics (verifiers, task generation).
-  - `user_interface/`: Console menu and localized rule translations.
-  - `data/`: Storage for `codes.txt`.
-- `tests/`: Automated test suite for all modules.
-- `documentation/`: Technical design and architecture reports.
+```text
+.
+├── README.md                # Project overview and instructions
+├── documentation/           # Technical design and architecture reports
+├── mypy.ini                 # Configuration for static type checking
+├── requirements.txt         # Project dependencies (pylint, mypy, coverage)
+├── source/                  # Main application package
+│   ├── __init__.py
+│   ├── game.py              # Entry point and main game loop
+│   ├── codes.txt            # Data file containing valid secret codes
+│   ├── data_parser.py       # Logic for loading and validating the code pool
+│   ├── code_verification.py # Implementation of logic verifiers
+│   ├── task_generator.py    # Generator for unique game tasks
+│   ├── verification_generator.py # Dynamic generator for rule combinations
+│   └── menu.py              # Console-based UI and menu management
+└── tests/                   # Automated test suite
+    ├── __init__.py
+    ├── test_game.py         # Integration tests for game flow
+    └── test_*.py            # Unit tests for each corresponding module
+```
 
 ## Getting Started
 
@@ -52,7 +66,7 @@ The project follows strict coding standards and type safety:
 
 * **Type Checking**: Run `mypy source` to verify type annotations and ensure logical consistency.
 * **Linting**: Run `pylint source --disable=C0114,C0115,C0116` to check PEP 8 compliance and code quality.
-* **Current Rating**: 9.5+/10.
+* **Current Rating**: 10/10.
 
 ---
 

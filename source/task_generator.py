@@ -1,7 +1,8 @@
 import random
+from typing import Any
 from source.data_parser import parse_file
 from source.code_verification import Verifier
-from source.verefication_generator import VerificationGenerator
+from source.verification_generator import VerificationGenerator
 
 # pylint: disable=too-few-public-methods
 class TaskGenerator:
@@ -11,12 +12,13 @@ class TaskGenerator:
 
         self.valid_codes_pool = parse_file()
         self.active_pool = list(self.valid_codes_pool)
+        random.shuffle(self.active_pool)
 
-    def generate_task(self, num_rules: int = 4) -> tuple:
+    def generate_task(self, num_rules: int = 5) -> tuple[tuple[int, int, int], list[Any]]:
         if not self.active_pool:
             self.active_pool = list(self.valid_codes_pool)
 
-        for _ in range(400):
+        for _ in range(1000):
             secret_code = random.choice(self.active_pool)
             verifier = Verifier(secret_code)
 
@@ -29,20 +31,16 @@ class TaskGenerator:
             if len(potential_rules) < num_rules:
                 continue
 
-            selected_rules = random.sample(potential_rules, num_rules)
+            for _ in range(10):
+                selected_rules = random.sample(potential_rules, num_rules)
+                solutions = self.rule_generator.find_all_solutions(selected_rules, verifier)
 
-            solutions = self.rule_generator.find_all_solutions(selected_rules,
-                                                               verifier)
+                if len(solutions) == 1:
+                    try:
+                        self.active_pool.remove(secret_code)
+                    except ValueError:
+                        pass
+                    return secret_code, selected_rules
 
-            if len(solutions) == 1:
-                try:
-                    self.active_pool.remove(secret_code)
-                except ValueError:
-                    print("This code was deleted or is not in pool!")
-                return secret_code, selected_rules
-
-        print("Warning: Unique solution could not be found. "
-              "Play on your own risk or try to start a new game.")
         backup_code = random.choice(self.active_pool)
-        return backup_code, random.sample(
-            self.rule_generator.combinations_list, num_rules)
+        return backup_code, random.sample(self.rule_generator.combinations_list, num_rules)

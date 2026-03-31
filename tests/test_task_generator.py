@@ -1,7 +1,7 @@
 import random
 from source.data_parser import parse_file
 from source.code_verification import Verifier
-from source.verefication_generator import VerificationGenerator
+from source.verification_generator import VerificationGenerator
 
 
 class TaskGenerator:
