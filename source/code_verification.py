@@ -1,12 +1,9 @@
-from typing import Tuple
-
-
 class Verifier:
-    def __init__(self, code: Tuple[int, int, int]) -> None:
-        self.secret_code: Tuple[int, int, int] = code
-        self.player_code: Tuple[int, int, int] = (0, 0, 0)
+    def __init__(self, code: tuple[int, int, int]) -> None:
+        self.secret_code: tuple[int, int, int] = code
+        self.player_code: tuple[int, int, int] = (0, 0, 0)
 
-    def update_player_code(self, player_code: Tuple[int, int, int]) -> None:
+    def update_player_code(self, player_code: tuple[int, int, int]) -> None:
         self.player_code = player_code
 
     def compare_digits_to_number(self, number_index: int,
@@ -86,7 +83,7 @@ class Verifier:
         player_sum_even = sum(self.player_code) % 2 == 0
         return secret_sum_even == player_sum_even
 
-    def compare_sum_to_value(self, indices: Tuple[int, ...],
+    def compare_sum_to_value(self, indices: tuple[int, ...],
                              number: int) -> bool:
         secret_sum = sum(self.secret_code[i] for i in indices)
         player_sum = sum(self.player_code[i] for i in indices)
@@ -100,7 +97,7 @@ class Verifier:
         return False
 
     @staticmethod
-    def get_order_type(code: Tuple[int, int, int]) -> str:
+    def get_order_type(code: tuple[int, int, int]) -> str:
         if code[0] < code[1] < code[2]:
             return "ascending"
         if code[0] > code[1] > code[2]:

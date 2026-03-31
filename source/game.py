@@ -1,4 +1,4 @@
-from typing import Optional, Tuple, List, Union, Dict, Any
+from typing import Optional, Union, Any
 from source.menu import Menu
 from source.task_generator import TaskGenerator
 from source.code_verification import Verifier
@@ -17,9 +17,9 @@ class TuringMachineGame:
             return
 
         self.menu: Menu = Menu()
-        self.secret_code: Optional[Tuple[int, int, int]] = None
-        self.rules: List[Tuple[str, Any]] = []
-        self.history: List[Dict[str, Any]] = []
+        self.secret_code: Optional[tuple[int, int, int]] = None
+        self.rules: list[tuple[str, Any]] = []
+        self.history: list[dict[str, Any]] = []
         self.errors_left: int = 6
 
     def reset_game(self) -> None:
@@ -52,7 +52,7 @@ class TuringMachineGame:
         print("=" * 40)
 
     @staticmethod
-    def get_player_input() -> Union[Tuple[int, int, int], str, None]:
+    def get_player_input() -> Union[tuple[int, int, int], str, None]:
         prompt = "\nEnter 3 digits (1-5) separated by commas or 'SOLVE': "
         user_input = input(prompt).strip().upper()
 
@@ -70,7 +70,7 @@ class TuringMachineGame:
             "Input Error! Please enter three digits (1-5) separated by commas.")
         return None
 
-    def _process_verification(self, choice: Tuple[int, int, int]) -> List[str]:
+    def _process_verification(self, choice: tuple[int, int, int]) -> list[str]:
         if self.secret_code is None:
             return []
 
