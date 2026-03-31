@@ -1,5 +1,4 @@
 import random
-from typing import Any
 from source.data_parser import parse_file
 from source.code_verification import Verifier
 from source.verification_generator import VerificationGenerator
@@ -21,7 +20,7 @@ class TaskGenerator:
 
         self.active_pool = list(self.valid_codes_pool)
 
-    def generate_task(self, num_rules: int = 4) -> tuple[tuple[int, int, int], list[Any]]:
+    def generate_task(self, num_rules: int = 4) -> tuple[tuple[int, int, int], list]:
         if not self.active_pool:
             self.active_pool = list(self.valid_codes_pool)
 

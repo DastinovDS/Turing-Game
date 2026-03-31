@@ -1,10 +1,9 @@
 from itertools import combinations, product
-from typing import Any
 from source.code_verification import Verifier
 
 class VerificationGenerator:
     def __init__(self) -> None:
-        self.combinations_list: list[tuple[str, tuple[Any, ...]]] = []
+        self.combinations_list: list[tuple[str, tuple]] = []
 
     def generate_compare_digits_to_number(self) -> None:
         for number_to_compare in range(1, 6):
@@ -72,7 +71,7 @@ class VerificationGenerator:
                     print(f"Error executing {method_name}: {e}")
 
     @staticmethod
-    def find_all_solutions(selected_rules: list[tuple[str, Any]],
+    def find_all_solutions(selected_rules: list[tuple],
                            verifier: Verifier) -> list[tuple[int, int, int]]:
         all_codes = list(product(range(1, 6), repeat=3))
         solutions: list[tuple[int, int, int]] = []
