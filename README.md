@@ -3,7 +3,7 @@
 A Python-based implementation of the "Turing Machine" board game. The goal is to find a secret three-digit code (numbers 1-5) by testing guesses against a set of logic verifiers.
 
 ## Features
-- **Dynamic Task Generation**: Each game features a unique secret code and a set of 4-6 verifiers that lead to a single unique solution.
+- **Dynamic Task Generation**: Each game features a unique secret code and a set of 4 verifiers that lead to a single unique solution.
 - **Advanced Verifier System**: Includes logical checks such as parity (even/odd), value comparisons, digit counting, and sum analysis.
 - **Code Validation**: Built-in solution finder to ensure every generated task is solvable and unique.
 - **Robust Data Handling**: External source for secret codes with automated fallback to default values.
