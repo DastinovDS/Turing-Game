@@ -4,9 +4,9 @@ from source.game_logic.code_verification import Verifier
 
 
 class TuringMachineGame:
-    def __init__(self):
+    def __init__(self) -> None:
         try:
-            self.task_gen = TaskGenerator()
+            self.task_gen: TaskGenerator = TaskGenerator()
         except Exception as e:
             print(f"Critical System Error during initialization: {e}")
             self.is_running = False
@@ -14,12 +14,12 @@ class TuringMachineGame:
 
         self.menu = Menu()
         self.secret_code = None
-        self.rules = []
-        self.history = []
+        self.rules: list = []
+        self.history: list = []
         self.errors_left = 6
         self.is_running = True
 
-    def reset_game(self):
+    def reset_game(self) -> None:
         try:
             self.secret_code, self.rules = self.task_gen.generate_task(num_rules=4)
             self.history = []
@@ -28,7 +28,7 @@ class TuringMachineGame:
             print(f"Failed to generate a new task: {e}")
             self.rules = []
 
-    def display_game_state(self):
+    def display_game_state(self) -> None:
         if not self.rules:
             print("\n[!] No active verifiers found. Please restart the game.")
             return
@@ -66,7 +66,7 @@ class TuringMachineGame:
               "separated by commas (e.g., 1,2,5).")
         return None
 
-    def play_round(self):
+    def play_round(self) -> None:
         self.reset_game()
         if not self.secret_code or not self.rules:
             print("System failure: Could not initialize game logic.")
@@ -136,7 +136,7 @@ class TuringMachineGame:
             f"\nOut of attempts or incorrect solution. System locked. "
             f"The code was: {self.secret_code}")
 
-    def run(self):
+    def run(self) -> None:
         while self.is_running:
             try:
                 choice = self.menu.show_main_menu()

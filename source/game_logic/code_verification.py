@@ -1,9 +1,9 @@
 class Verifier:
-    def __init__(self, code: tuple[int,int,int]):
+    def __init__(self, code: tuple[int,int,int]) -> None:
         self.secret_code: tuple[int,int,int] = code
         self.player_code: tuple[int,int,int] = (0,0,0)
 
-    def update_player_code(self, player_code: tuple[int,int,int]):
+    def update_player_code(self, player_code: tuple[int,int,int]) -> None:
         self.player_code = player_code
 
     def compare_digits_to_number(self, number_index: int, number_to_compare: int) -> bool:
@@ -112,7 +112,7 @@ class Verifier:
         else:
             return "no_order"
 
-    def check_number_order(self):
+    def check_number_order(self) -> bool:
         return self.get_order_type(self.secret_code) == self.get_order_type(self.player_code)
 
     def count_value(self, value: int, expected_count: int) -> bool:

@@ -1,5 +1,6 @@
 from itertools import combinations, product
 from typing import Any
+from source.game_logic.code_verification import Verifier
 
 class VerificationGenerator:
     def __init__(self) -> None:
@@ -26,7 +27,7 @@ class VerificationGenerator:
     def generate_compare_min_position(self) -> None:
         self.combinations_list.append(("compare_min_position", ()))
 
-    def generate_compare_max_position(self):
+    def generate_compare_max_position(self) -> None:
         self.combinations_list.append(("compare_max_position", ()))
 
     def generate_compare_even_amount(self) -> None:
@@ -71,23 +72,26 @@ class VerificationGenerator:
                     print(f"Error executing {method_name}: {e}")
 
     @staticmethod
-    def find_all_solutions(selected_rules: list, verifier) -> list[tuple]:
+    def find_all_solutions(selected_rules: list[tuple[str, Any]],
+                           verifier: Verifier) -> list[tuple[int, int, int]]:
         all_codes = list(product(range(1, 6), repeat=3))
-        solutions = []
+        solutions: list[tuple[int, int, int]] = []
 
-        for code in all_codes:
+        for code_tuple in all_codes:
+            code: tuple[int, int, int] = (code_tuple[0], code_tuple[1],
+                                          code_tuple[2])
+
             verifier.player_code = code
 
             is_match = True
             for method_name, args in selected_rules:
                 try:
                     method = getattr(verifier, method_name)
-                    if not method(*args):
-                        is_match = False
-                        break
-                except AttributeError:
-                    continue
-                except Exception:
+                    if callable(method):
+                        if not method(*args):
+                            is_match = False
+                            break
+                except (AttributeError, TypeError):
                     is_match = False
                     break
 

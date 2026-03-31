@@ -5,14 +5,14 @@ from source.game_logic.verefication_generator import VerificationGenerator
 
 
 class TaskGenerator:
-    def __init__(self):
+    def __init__(self) -> None:
         self.rule_generator = VerificationGenerator()
         self.rule_generator.fill_all_combinations()
 
         self.valid_codes_pool = parse_file()
         self.active_pool = list(self.valid_codes_pool)
 
-    def generate_task(self, num_rules: int = 4):
+    def generate_task(self, num_rules: int = 4) -> tuple:
         if not self.active_pool:
             self.active_pool = list(self.valid_codes_pool)
 
