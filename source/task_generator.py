@@ -10,37 +10,49 @@ class TaskGenerator:
         self.rule_generator = VerificationGenerator()
         self.rule_generator.fill_all_combinations()
 
-        self.valid_codes_pool = parse_file()
-        self.active_pool = list(self.valid_codes_pool)
-        random.shuffle(self.active_pool)
+        try:
+            loaded_codes = parse_file()
+            if not loaded_codes:
+                raise ValueError("No codes found")
+            self.valid_codes_pool = loaded_codes
+        except (AttributeError, TypeError, ValueError) as e:
+            print(f"Loading failed: {e}. Using emergency backup.")
+            self.valid_codes_pool = [(1, 2, 3), (4, 5, 1), (2, 2, 2), (5, 5, 5)]
 
-    def generate_task(self, num_rules: int = 5) -> tuple[tuple[int, int, int], list[Any]]:
+        self.active_pool = list(self.valid_codes_pool)
+
+    def generate_task(self, num_rules: int = 4) -> tuple[tuple[int, int, int], list[Any]]:
         if not self.active_pool:
             self.active_pool = list(self.valid_codes_pool)
 
-        for _ in range(1000):
-            secret_code = random.choice(self.active_pool)
-            verifier = Verifier(secret_code)
+        for _ in range(400):
+            try:
+                secret_code = random.choice(self.active_pool)
+                verifier = Verifier(secret_code)
+                potential_rules = []
 
-            potential_rules = []
-            for rule in self.rule_generator.combinations_list:
-                method_name, args = rule
-                if getattr(verifier, method_name)(*args):
-                    potential_rules.append(rule)
+                for rule in self.rule_generator.combinations_list:
+                    method_name, args = rule
+                    try:
+                        method = getattr(verifier, method_name)
+                        if method(*args):
+                            potential_rules.append(rule)
+                    except (AttributeError, TypeError, ValueError):
+                        continue
 
-            if len(potential_rules) < num_rules:
-                continue
+                if len(potential_rules) < num_rules:
+                    continue
 
-            for _ in range(10):
                 selected_rules = random.sample(potential_rules, num_rules)
                 solutions = self.rule_generator.find_all_solutions(selected_rules, verifier)
 
                 if len(solutions) == 1:
-                    try:
+                    if secret_code in self.active_pool:
                         self.active_pool.remove(secret_code)
-                    except ValueError:
-                        pass
                     return secret_code, selected_rules
 
-        backup_code = random.choice(self.active_pool)
+            except (AttributeError, TypeError, ValueError):
+                continue
+
+        backup_code = random.choice(self.valid_codes_pool)
         return backup_code, random.sample(self.rule_generator.combinations_list, num_rules)
