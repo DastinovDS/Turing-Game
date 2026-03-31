@@ -1,7 +1,7 @@
 from typing import Optional, Tuple, List, Union, Dict, Any
-from source.user_interface.menu import Menu
-from source.game_logic.task_generator import TaskGenerator
-from source.game_logic.code_verification import Verifier
+from source.menu import Menu
+from source.task_generator import TaskGenerator
+from source.code_verification import Verifier
 
 
 class TuringMachineGame:

@@ -1,5 +1,5 @@
 import unittest
-from source.user_interface.menu import Menu
+from source.menu import Menu
 
 class TestMenu(unittest.TestCase):
 

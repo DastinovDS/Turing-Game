@@ -1,6 +1,6 @@
 from itertools import combinations, product
 from typing import Any
-from source.game_logic.code_verification import Verifier
+from source.code_verification import Verifier
 
 class VerificationGenerator:
     def __init__(self) -> None:

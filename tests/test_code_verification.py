@@ -1,5 +1,5 @@
 import unittest
-from source.game_logic.code_verification import Verifier
+from source.code_verification import Verifier
 
 
 class TestVerifier(unittest.TestCase):

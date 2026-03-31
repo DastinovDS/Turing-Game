@@ -1,6 +1,6 @@
 import unittest
-from source.game_logic.verefication_generator import VerificationGenerator
-from source.game_logic.code_verification import Verifier
+from source.verefication_generator import VerificationGenerator
+from source.code_verification import Verifier
 
 
 class TestVerificationGenerator(unittest.TestCase):
