@@ -76,5 +76,5 @@ class Menu:
             if method_name in mappings:
                 return mappings[method_name](args)
             return f"Verification: {method_name} {args}"
-        except Exception:
+        except (AttributeError, TypeError, ValueError):
             return f"Complex Condition ({method_name})"

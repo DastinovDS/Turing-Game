@@ -1,3 +1,4 @@
+from typing import Optional, Tuple, List, Union, Dict, Any
 from source.user_interface.menu import Menu
 from source.game_logic.task_generator import TaskGenerator
 from source.game_logic.code_verification import Verifier
@@ -5,26 +6,29 @@ from source.game_logic.code_verification import Verifier
 
 class TuringMachineGame:
     def __init__(self) -> None:
+
+        self.is_running: bool = True
+
         try:
             self.task_gen: TaskGenerator = TaskGenerator()
-        except Exception as e:
+        except (ImportError, FileNotFoundError, RuntimeError) as e:
             print(f"Critical System Error during initialization: {e}")
             self.is_running = False
             return
 
-        self.menu = Menu()
-        self.secret_code = None
-        self.rules: list = []
-        self.history: list = []
-        self.errors_left = 6
-        self.is_running = True
+        self.menu: Menu = Menu()
+        self.secret_code: Optional[Tuple[int, int, int]] = None
+        self.rules: List[Tuple[str, Any]] = []
+        self.history: List[Dict[str, Any]] = []
+        self.errors_left: int = 6
 
     def reset_game(self) -> None:
         try:
-            self.secret_code, self.rules = self.task_gen.generate_task(num_rules=4)
+            self.secret_code, self.rules = self.task_gen.generate_task(
+                num_rules=4)
             self.history = []
             self.errors_left = 6
-        except Exception as e:
+        except RuntimeError as e:
             print(f"Failed to generate a new task: {e}")
             self.rules = []
 
@@ -48,9 +52,9 @@ class TuringMachineGame:
         print("=" * 40)
 
     @staticmethod
-    def get_player_input() -> tuple[int, int, int] | str | None:
-        user_input = input("\nEnter 3 digits (1-5) separated by commas or "
-                           "'SOLVE' for the final guess: ").strip().upper()
+    def get_player_input() -> Union[Tuple[int, int, int], str, None]:
+        prompt = "\nEnter 3 digits (1-5) separated by commas or 'SOLVE': "
+        user_input = input(prompt).strip().upper()
 
         if user_input == 'SOLVE':
             return 'SOLVE'
@@ -59,12 +63,29 @@ class TuringMachineGame:
             parts = [int(x.strip()) for x in user_input.split(',')]
             if len(parts) == 3 and all(1 <= x <= 5 for x in parts):
                 return parts[0], parts[1], parts[2]
-        except (ValueError, TypeError, AttributeError):
+        except (ValueError, TypeError, IndexError):
             pass
 
-        print("Input Error! Please enter three digits from 1 to 5 "
-              "separated by commas (e.g., 1,2,5).")
+        print(
+            "Input Error! Please enter three digits (1-5) separated by commas.")
         return None
+
+    def _process_verification(self, choice: Tuple[int, int, int]) -> List[str]:
+        if self.secret_code is None:
+            return []
+
+        verifier = Verifier(self.secret_code)
+        verifier.update_player_code(choice)
+        round_results = []
+
+        for name, args in self.rules:
+            try:
+                method = getattr(verifier, name)
+                res = method(*args)
+                round_results.append("✅" if res else "❌")
+            except (AttributeError, TypeError):
+                round_results.append("❓")
+        return round_results
 
     def play_round(self) -> None:
         self.reset_game()
@@ -80,61 +101,40 @@ class TuringMachineGame:
 
             if choice is None:
                 continue
-
             if choice == 'SOLVE':
-                final_guess = input(
-                    "WARNING! Enter your final 3-digit code (e.g., 1,2,3): ").strip()
-                try:
-                    guess_tuple = tuple(
-                        int(x.strip()) for x in final_guess.split(','))
+                if self._handle_solve():
+                    return
+                break
 
-                    if len(guess_tuple) != 3:
-                        print(
-                            "Error: The final guess must contain exactly 3 digits.")
-                        continue
-
-                    if guess_tuple == self.secret_code:
-                        print(
-                            f"VICTORY! The code {self.secret_code} is correct. System breached!")
-                        return
-                    else:
-                        print(
-                            f"CRITICAL ERROR! {guess_tuple} was incorrect.")
-                        break
-
-                except (ValueError, IndexError):
-                    print(
-                        "Invalid format! Final solution must be digits separated by commas.")
-                    continue
-
-            verifier = Verifier(self.secret_code)
-            verifier.update_player_code(choice)
-
-            round_results = []
-            for name, args in self.rules:
-                try:
-                    method = getattr(verifier, name)
-                    res = method(*args)
-                    round_results.append("✅" if res else "❌")
-                except AttributeError:
-                    print(
-                        f"Logic Error: Verifier '{name}' is missing in the engine.")
-                    round_results.append("❓")
-                except Exception as e:
-                    print(f"Unexpected error during verification: {e}")
-                    round_results.append("❓")
-
-            self.history.append({'code': choice, 'results': round_results})
+            results = self._process_verification(choice)  # type: ignore
+            self.history.append({'code': choice, 'results': results})
 
             if choice != self.secret_code:
                 self.errors_left -= 1
             else:
                 print(
-                    f"It seems code {choice} passes all checks! Type 'SOLVE' to confirm.")
+                    f"Code {choice} passes all checks! Type 'SOLVE' to confirm.")
 
-        print(
-            f"\nOut of attempts or incorrect solution. System locked. "
-            f"The code was: {self.secret_code}")
+        print(f"\nGame Over. The code was: {self.secret_code}")
+
+    def _handle_solve(self) -> bool:
+        final_input = input(
+            "Enter your final 3-digit code (e.g., 1,2,3): ").strip()
+        try:
+            guess = tuple(int(x.strip()) for x in final_input.split(','))
+            if len(guess) != 3:
+                print("Error: Must contain exactly 3 digits.")
+                return True
+
+            if guess == self.secret_code:
+                print(f"VICTORY! The code {self.secret_code} is correct!")
+                return True
+
+            print(f"CRITICAL ERROR! {guess} was incorrect.")
+            return False
+        except (ValueError, IndexError):
+            print("Invalid format!")
+            return True
 
     def run(self) -> None:
         while self.is_running:
@@ -150,10 +150,10 @@ class TuringMachineGame:
                 else:
                     print("Please select a valid option (1-3).")
             except KeyboardInterrupt:
-                print("\n\nSystem interrupted. Shutting down...")
+                print("\nShutting down...")
                 self.is_running = False
-            except Exception as e:
-                print(f"An unexpected error occurred in the menu: {e}")
+            except RuntimeError as e:
+                print(f"An unexpected error occurred: {e}")
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ from source.data_parser import parse_file
 from source.game_logic.code_verification import Verifier
 from source.game_logic.verefication_generator import VerificationGenerator
 
-
+# pylint: disable=too-few-public-methods
 class TaskGenerator:
     def __init__(self) -> None:
         self.rule_generator = VerificationGenerator()

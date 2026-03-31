@@ -68,7 +68,7 @@ class VerificationGenerator:
                     method = getattr(self, method_name)
                     if callable(method):
                         method()
-                except Exception as e:
+                except (AttributeError, TypeError, ValueError) as e:
                     print(f"Error executing {method_name}: {e}")
 
     @staticmethod
