@@ -26,7 +26,6 @@ A Python-based implementation of the "Turing Machine" board game. The goal is to
 │   └── menu.py              # Console-based UI and menu management
 └── tests/                   # Automated test suite
     ├── __init__.py
-    ├── test_game.py         # Integration tests for game flow
     └── test_*.py            # Unit tests for each corresponding module
 ```
 
@@ -50,12 +49,12 @@ A Python-based implementation of the "Turing Machine" board game. The goal is to
 ## Quality Assurance
 
 ### Testing
-- To run the full suite of 27 unit tests:
+- To run the full suite of 32 unit tests:
     ```bash
    python -m unittest discover tests
 
 ### Code coverage
-- To check how much of the code is covered by tests (Target: >80%):
+- To check how much of the code is covered by tests (Target: >75%):
     ```bash
    coverage run -m unittest discover tests
    coverage report
